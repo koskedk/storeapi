@@ -68,6 +68,8 @@ async def authenticate_user(email: str, password: str):
         raise create_unauthorized_exception("Could not validate credentials")
     if not verify_password_hash(password, user.password):
         raise create_unauthorized_exception("Could not validate credentials")
+    if not user.confirmed:
+        raise create_unauthorized_exception("User has not confirmed email")
     return user
 
 

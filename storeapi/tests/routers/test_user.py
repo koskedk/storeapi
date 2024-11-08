@@ -14,7 +14,6 @@ async def register_user(async_client: AsyncClient, email: str, password: str):
 async def test_register(async_client: AsyncClient):
     newuser = {"email": "maun@test.com", "password": "12345"}
     response = await register_user(async_client, newuser["email"], newuser["password"])
-
     assert response.status_code == status.HTTP_201_CREATED
 
 
@@ -68,12 +67,12 @@ async def test_login_user_not_exists(async_client: AsyncClient):
 
 
 @pytest.mark.anyio
-async def test_login_user(async_client: AsyncClient, registered_user: dict):
+async def test_login_user(async_client: AsyncClient, confirmed_user: dict):
     response = await async_client.post(
         "/token",
         data={
-            "username": registered_user["email"],
-            "password": registered_user["password"],
+            "username": confirmed_user["email"],
+            "password": confirmed_user["password"],
         },
     )
     assert response.status_code == 200

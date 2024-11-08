@@ -48,20 +48,20 @@ async def liked_post(async_client: AsyncClient, created_post: dict, logged_in_to
 
 
 @pytest.mark.anyio
-async def test_create_post(async_client: AsyncClient, registered_user: dict, logged_in_token: str):
+async def test_create_post(async_client: AsyncClient, confirmed_user: dict, logged_in_token: str):
     body = "The Post"
     response = await async_client.post(
         "/post",
-        json={"body": body, "user_id": registered_user["id"]},
+        json={"body": body, "user_id": confirmed_user["id"]},
         headers={"Authorization": f"Bearer {logged_in_token}"}
     )
 
     assert response.status_code == 201
-    assert {"id": 1, "body": "The Post", "user_id": registered_user["id"]}.items() <= response.json().items()
+    assert {"id": 1, "body": "The Post", "user_id": confirmed_user["id"]}.items() <= response.json().items()
 
 
 @pytest.mark.anyio
-async def test_create_post_no_body(async_client: AsyncClient, registered_user: dict, logged_in_token: str):
+async def test_create_post_no_body(async_client: AsyncClient, logged_in_token: str):
     res = await async_client.post("/post", json={}, headers={"Authorization": f"Bearer {logged_in_token}"})
 
     assert res.status_code == 422
